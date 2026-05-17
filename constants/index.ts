@@ -1,4 +1,4 @@
-export const SITE_NAME = "Brady Casa Inn";
+export const SITE_NAME = "Brady Inn";
 export const SITE_TAGLINE = "Log Cabin Luxury, Lofted in Love";
 export const SITE_DESCRIPTION =
   "A boutique cabin inn where rustic warmth meets refined comfort. Five rooms, five stories — each one made for a different kind of stay.";

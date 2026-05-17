@@ -2,46 +2,24 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { Star, Heart } from "lucide-react";
 import { featuredRooms } from "@/data/rooms";
 import { useScrollAnimationConfig } from "@/hooks/useScrollAnimation";
 import { staggerContainer, staggerItem, fadeUp } from "@/animations/variants";
-
-const accentMap = {
-  gold: {
-    border: "rgba(212,168,67,0.25)",
-    glow: "rgba(212,168,67,0.07)",
-    tag: "rgba(212,168,67,0.12)",
-    tagText: "#d4a843",
-    line: "linear-gradient(90deg, #8a600e, #d4a843)",
-  },
-  warm: {
-    border: "rgba(210,140,80,0.25)",
-    glow: "rgba(210,140,80,0.07)",
-    tag: "rgba(210,140,80,0.12)",
-    tagText: "#d28c50",
-    line: "linear-gradient(90deg, #7a4a18, #d28c50)",
-  },
-  rose: {
-    border: "rgba(220,100,120,0.25)",
-    glow: "rgba(220,100,120,0.07)",
-    tag: "rgba(220,100,120,0.12)",
-    tagText: "#dc6478",
-    line: "linear-gradient(90deg, #8a1a30, #dc6478)",
-  },
-};
 
 export default function Suites() {
   const header = useScrollAnimationConfig(0.2);
   const cards = useScrollAnimationConfig(0.1);
 
+  const gold = "rgba(212,168,67,0.9)";
+
   return (
     <section className="relative py-24 md:py-40 overflow-hidden" style={{ backgroundColor: "#050508" }}>
-      {/* Ambient blobs */}
+      {/* Ambient warm glow */}
       <div
         className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
         style={{
-          background: "radial-gradient(circle at 80% 20%, rgba(124,58,237,0.05) 0%, transparent 60%)",
+          background: "radial-gradient(circle at 80% 20%, rgba(212,168,67,0.06) 0%, transparent 60%)",
           filter: "blur(80px)",
         }}
       />
@@ -96,158 +74,104 @@ export default function Suites() {
           animate={cards.animate}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
         >
-          {featuredRooms.map((room) => {
-            const accent = accentMap[room.accent];
-            return (
-              <motion.div
-                key={room.id}
-                variants={staggerItem}
-                className="group relative flex flex-col overflow-hidden"
-                style={{
-                  background: "rgba(13,13,20,0.6)",
-                  border: `1px solid ${accent.border}`,
-                  backdropFilter: "blur(20px)",
-                }}
-                whileHover={{ y: -8, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
-              >
-                {/* Hover glow */}
+          {featuredRooms.map((room) => (
+            <motion.div
+              key={room.id}
+              variants={staggerItem}
+              className="group relative flex flex-col overflow-hidden rounded-lg"
+              style={{
+                background: "rgba(13,13,20,0.5)",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
+              whileHover={{ y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
+            >
+              {/* Image */}
+              <div className="relative overflow-hidden" style={{ height: "280px" }}>
                 <motion.div
-                  className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100"
-                  style={{
-                    background: `radial-gradient(ellipse at 50% 0%, ${accent.glow} 0%, transparent 70%)`,
-                  }}
-                  transition={{ duration: 0.4 }}
-                />
-
-                {/* Image */}
-                <div className="relative overflow-hidden" style={{ height: "260px" }}>
-                  <motion.div
-                    className="w-full h-full"
-                    whileHover={{ scale: 1.06 }}
-                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <div
-                      className="w-full h-full"
-                      style={{
-                        backgroundImage: `url('${room.image}')`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                    />
-                  </motion.div>
-
-                  {/* Image overlay */}
+                  className="w-full h-full"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                >
                   <div
-                    className="absolute inset-0"
+                    className="w-full h-full"
                     style={{
-                      background: "linear-gradient(180deg, transparent 40%, rgba(13,13,20,0.8) 100%)",
+                      backgroundImage: `url('${room.image}')`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
                     }}
                   />
+                </motion.div>
+              </div>
 
-                  {/* Type badge */}
-                  <div className="absolute top-4 left-4">
-                    <span
-                      className="text-xs px-3 py-1.5 tracking-widest uppercase"
+              {/* Card content */}
+              <div className="flex flex-col p-5">
+                {/* Location */}
+                <div className="flex items-start justify-between mb-2">
+                  <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
+                    {room.name}
+                  </p>
+                  <div className="flex items-center gap-1">
+                    <Star size={14} fill={gold} style={{ color: gold }} />
+                    <span className="text-sm" style={{ color: "rgba(255,255,255,0.85)" }}>{room.rating}</span>
+                  </div>
+                </div>
+
+                {/* Location + distance */}
+                <p className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.5)" }}>
+                  {room.location}
+                </p>
+
+                {/* Divider */}
+                <div className="w-full h-px mb-3" style={{ background: "rgba(255,255,255,0.08)" }} />
+
+                {/* Specs */}
+                <div className="flex items-center gap-3 text-xs mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  <span>{room.beds}</span>
+                  <span>·</span>
+                  <span>{room.guests}</span>
+                </div>
+
+                {/* Price */}
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-xs tracking-widest uppercase mb-1" style={{ color: "rgba(255,255,255,0.3)" }}>
+                      From
+                    </p>
+                    <p
+                      className="font-light leading-none"
                       style={{
-                        background: accent.tag,
-                        color: accent.tagText,
-                        border: `1px solid ${accent.border}`,
-                        backdropFilter: "blur(10px)",
+                        fontFamily: '"Cormorant Garamond", serif',
+                        fontSize: "1.75rem",
+                        color: gold,
+                        letterSpacing: "-0.02em",
                       }}
                     >
-                      {room.type}
-                    </span>
+                      ${room.price.toLocaleString()}
+                      <span className="text-xs ml-1" style={{ color: "rgba(200,185,150,0.4)" }}>
+                        / night
+                      </span>
+                    </p>
                   </div>
 
-                  {/* Guests badge */}
-                  <div
-                    className="absolute bottom-4 right-4 text-xs px-3 py-1 tracking-widest"
-                    style={{
-                      background: "rgba(5,5,8,0.7)",
-                      color: "rgba(240,240,245,0.4)",
-                      border: "1px solid rgba(255,255,255,0.06)",
-                      backdropFilter: "blur(10px)",
-                    }}
-                  >
-                    {room.guests}
-                  </div>
+                  <Link href={`/booking?room=${room.id}`} data-cursor="hover">
+                    <motion.button
+                      className="px-5 py-2.5 text-xs tracking-widest uppercase"
+                      style={{
+                        background: "rgba(212,168,67,0.1)",
+                        color: gold,
+                        border: "1px solid rgba(212,168,67,0.3)",
+                      }}
+                      whileHover={{ background: "rgba(212,168,67,0.2)", scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      Reserve
+                    </motion.button>
+                  </Link>
                 </div>
-
-                {/* Card content */}
-                <div className="flex flex-col flex-1 p-6">
-                  {/* Top line */}
-                  <div className="w-full h-px mb-5" style={{ background: `linear-gradient(90deg, ${accent.border}, transparent)` }} />
-
-                  <p className="text-xs tracking-[0.3em] uppercase mb-2" style={{ color: accent.tagText, opacity: 0.7 }}>
-                    {room.type}
-                  </p>
-                  <h3
-                    className="font-light mb-1 leading-tight"
-                    style={{
-                      fontFamily: '"Cormorant Garamond", serif',
-                      fontSize: "1.6rem",
-                      color: "rgba(245,235,210,0.95)",
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
-                    {room.name}
-                  </h3>
-                  <p className="text-xs italic mb-3" style={{ color: accent.tagText, fontFamily: '"Cormorant Garamond", serif', fontSize: "0.95rem", opacity: 0.75 }}>
-                    &ldquo;{room.tagline}&rdquo;
-                  </p>
-                  <p className="text-xs leading-relaxed mb-5 flex-1" style={{ color: "rgba(200,190,160,0.55)" }}>
-                    {room.description.slice(0, 110)}…
-                  </p>
-
-                  {/* Specs row */}
-                  <div className="flex items-center gap-4 mb-6 text-xs" style={{ color: "rgba(200,190,160,0.35)" }}>
-                    <span>{room.beds}</span>
-                    <span style={{ color: "rgba(255,255,255,0.1)" }}>·</span>
-                    <span>{room.guests}</span>
-                  </div>
-
-                  {/* Price + CTA */}
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className="text-xs tracking-widest uppercase mb-1" style={{ color: "rgba(255,255,255,0.2)" }}>
-                        From
-                      </p>
-                      <p
-                        className="font-light leading-none"
-                        style={{
-                          fontFamily: '"Cormorant Garamond", serif',
-                          fontSize: "1.8rem",
-                          color: accent.tagText,
-                          letterSpacing: "-0.02em",
-                        }}
-                      >
-                        ${room.price.toLocaleString()}
-                        <span className="text-xs ml-1" style={{ color: "rgba(200,185,150,0.35)" }}>
-                          / night
-                        </span>
-                      </p>
-                    </div>
-
-                    <Link href="/booking" data-cursor="hover">
-                      <motion.button
-                        className="flex items-center gap-2 p-3"
-                        style={{
-                          border: `1px solid ${accent.border}`,
-                          color: accent.tagText,
-                          background: accent.tag,
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <ArrowUpRight size={16} />
-                      </motion.button>
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* View all CTA */}
@@ -267,15 +191,14 @@ export default function Suites() {
                 background: "transparent",
               }}
               whileHover={{
-                borderColor: "rgba(0,229,255,0.3)",
-                color: "#00e5ff",
+                borderColor: "rgba(212,168,67,0.3)",
+                color: gold,
                 scale: 1.02,
                 transition: { duration: 0.3 },
               }}
               whileTap={{ scale: 0.98 }}
             >
               Explore All Rooms
-              <ArrowUpRight size={14} />
             </motion.button>
           </Link>
         </motion.div>

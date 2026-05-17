@@ -452,7 +452,7 @@ export default function BookingPage() {
               Log Cabin Luxury,<br />Lofted in Love.
             </p>
             <p className="text-sm" style={{ color: "rgba(220,195,140,0.45)" }}>
-              Brady Casa Inn · Mountain View, CA
+              Brady Inn · Mountain View, CA
             </p>
 
             {/* Step labels */}

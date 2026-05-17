@@ -101,7 +101,7 @@ export default function BookingCTA() {
                     backgroundClip: "text",
                   }}
                 >
-                  Your Brady Casa<br />Story Starts<br />Right Here
+                  Your Brady<br />Story Starts<br />Right Here
                 </motion.h2>
 
                 <motion.p

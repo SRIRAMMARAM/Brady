@@ -22,6 +22,9 @@ export interface Room {
   accent: "gold" | "warm" | "rose";
   intents: StayIntent[];
   featured?: boolean;
+  location: string;
+  rating: number;
+  reviewCount: number;
 }
 
 export const rooms: Room[] = [
@@ -50,6 +53,10 @@ export const rooms: Room[] = [
     image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1400&q=80",
     accent: "warm",
     intents: ["simple-overnight", "quiet-getaway"],
+    location: "Mountain View, CA",
+    rating: 4.9,
+    reviewCount: 127,
+    featured: true,
   },
   {
     id: "the-timber-king",
@@ -77,6 +84,9 @@ export const rooms: Room[] = [
     accent: "gold",
     intents: ["quiet-getaway", "simple-overnight"],
     featured: true,
+    location: "Mountain View, CA",
+    rating: 5.0,
+    reviewCount: 214,
   },
   {
     id: "the-family-lodge",
@@ -104,6 +114,9 @@ export const rooms: Room[] = [
     accent: "warm",
     intents: ["family-comfort", "spacious-group"],
     featured: true,
+    location: "Mountain View, CA",
+    rating: 4.8,
+    reviewCount: 89,
   },
   {
     id: "the-honeymoon-cabin",
@@ -111,7 +124,7 @@ export const rooms: Room[] = [
     name: "The Honeymoon Cabin",
     tagline: "Just the two of you. As it always should be.",
     story:
-      "Candlelight on log walls. A soaking tub by the window. Champagne waiting on the dresser. The Honeymoon Cabin at Brady Casa Inn was built for one specific kind of stay — the kind you'll still talk about years later. We don't oversell it. We just make sure everything is perfect.",
+      "Candlelight on log walls. A soaking tub by the window. Champagne waiting on the dresser. The Honeymoon Cabin at Brady Inn was built for one specific kind of stay — the kind you'll still talk about years later. We don't oversell it. We just make sure everything is perfect.",
     description:
       "An intimate suite with romance-forward cabin design, a stone fireplace, private deck, and a soaking tub that looks out into the trees.",
     price: 150,
@@ -131,6 +144,9 @@ export const rooms: Room[] = [
     accent: "rose",
     intents: ["romantic-escape"],
     featured: true,
+    location: "Mountain View, CA",
+    rating: 4.9,
+    reviewCount: 156,
   },
   {
     id: "the-brady-loft",
@@ -138,7 +154,7 @@ export const rooms: Room[] = [
     name: "The Brady Loft",
     tagline: "High ceilings. Big table. Bring everyone.",
     story:
-      "The Loft is Brady Casa Inn's biggest personality. Double-height timber ceilings, an open floor plan that actually breathes, a kitchen table big enough for the whole crew, and a loft-level queen so everyone gets their own space. It's the room that makes group trips worth taking.",
+      "The Loft is Brady Inn's biggest personality. Double-height timber ceilings, an open floor plan that actually breathes, a kitchen table big enough for the whole crew, and a loft-level queen so everyone gets their own space. It's the room that makes group trips worth taking.",
     description:
       "Our signature loft suite — double-height cabin ceilings, an open-plan great room, full kitchenette, and a loft bedroom that floats above it all.",
     price: 126,
@@ -158,6 +174,9 @@ export const rooms: Room[] = [
     accent: "gold",
     intents: ["spacious-group", "family-comfort"],
     featured: true,
+    location: "Mountain View, CA",
+    rating: 4.7,
+    reviewCount: 78,
   },
 ];
 

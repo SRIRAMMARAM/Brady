@@ -167,7 +167,7 @@ export default function Footer() {
           style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
         >
           <p className="text-xs" style={{ color: "rgba(212,168,67,0.2)" }}>
-            © {year} Brady Casa Inn. All rights reserved.
+            © {year} Brady Inn. All rights reserved.
           </p>
 
           <div className="flex items-center gap-3">

@@ -86,7 +86,7 @@ export default function Hero() {
           <motion.div variants={fadeIn} className="flex items-center gap-3 mb-8">
             <div className="w-8 h-px" style={{ background: "linear-gradient(90deg, #8a600e, #d4a843)" }} />
             <span className="text-xs tracking-[0.4em] uppercase" style={{ color: "rgba(212,168,67,0.75)" }}>
-              Brady Casa Inn &nbsp;·&nbsp; Log Cabin Luxury
+              Brady Inn &nbsp;·&nbsp; Log Cabin Luxury
             </span>
           </motion.div>
 
@@ -105,7 +105,7 @@ export default function Hero() {
                 backgroundClip: "text",
               }}
             >
-              Brady Casa Inn
+              Brady Inn
             </motion.h1>
           </div>
 

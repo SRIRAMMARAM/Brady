@@ -17,12 +17,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Brady Casa Inn — Log Cabin Luxury, Lofted in Love",
+  title: "Brady Inn — Log Cabin Luxury, Lofted in Love",
   description:
     "A boutique cabin inn where rustic warmth meets refined comfort. Five rooms, five stories — each one made for a different kind of stay.",
-  keywords: ["cabin inn", "log cabin luxury", "Brady Casa Inn", "boutique hotel", "mountain view ca"],
+  keywords: ["cabin inn", "log cabin luxury", "Brady Inn", "boutique hotel", "mountain view ca"],
   openGraph: {
-    title: "Brady Casa Inn",
+    title: "Brady Inn",
     description: "Log Cabin Luxury, Lofted in Love",
     type: "website",
   },
