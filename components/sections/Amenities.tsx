@@ -91,7 +91,7 @@ export default function Amenities() {
             className="max-w-xs text-sm leading-relaxed"
             style={{ color: "rgba(152,152,168,0.6)" }}
           >
-            Every detail of NOX AETHER has been engineered to exceed expectation.
+            Every detail of Brady Inn has been engineered to exceed expectation.
             Not as a feature list — as a way of life.
           </motion.p>
         </motion.div>

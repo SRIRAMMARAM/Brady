@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Star, Heart } from "lucide-react";
+import { Star } from "lucide-react";
 import { featuredRooms } from "@/data/rooms";
 import { useScrollAnimationConfig } from "@/hooks/useScrollAnimation";
 import { staggerContainer, staggerItem, fadeUp } from "@/animations/variants";
@@ -10,6 +11,7 @@ import { staggerContainer, staggerItem, fadeUp } from "@/animations/variants";
 export default function Suites() {
   const header = useScrollAnimationConfig(0.2);
   const cards = useScrollAnimationConfig(0.1);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const gold = "rgba(212,168,67,0.9)";
 
@@ -66,30 +68,42 @@ export default function Suites() {
           </div>
         </motion.div>
 
-        {/* Room cards grid */}
-        <motion.div
-          ref={cards.ref}
-          variants={staggerContainer}
-          initial={cards.initial}
-          animate={cards.animate}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-        >
-          {featuredRooms.map((room) => (
+        {/* Room cards — horizontal scroll row */}
+      </div>
+      <motion.div
+        ref={cards.ref}
+        variants={staggerContainer}
+        initial={cards.initial}
+        animate={cards.animate}
+        className="flex gap-3 w-full"
+        style={{
+          paddingLeft: "clamp(1.5rem, 5vw, 5rem)",
+          paddingRight: "clamp(1.5rem, 5vw, 5rem)",
+        }}
+      >
+        {featuredRooms.map((room) => {
+          const isHovered = hoveredId === room.id;
+          const isShrunk = hoveredId !== null && !isHovered;
+          return (
             <motion.div
               key={room.id}
               variants={staggerItem}
-              className="group relative flex flex-col overflow-hidden rounded-lg"
+              className="relative flex flex-col overflow-hidden rounded-lg cursor-pointer"
               style={{
-                background: "rgba(13,13,20,0.5)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                flex: isHovered ? "1.8 1 0" : isShrunk ? "0.7 1 0" : "1 1 0",
+                minWidth: 0,
+                transition: "flex 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
+                background: "rgba(13,13,20,0.6)",
+                border: `1px solid ${isHovered ? "rgba(212,168,67,0.35)" : "rgba(255,255,255,0.08)"}`,
               }}
-              whileHover={{ y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
+              onMouseEnter={() => setHoveredId(room.id)}
+              onMouseLeave={() => setHoveredId(null)}
             >
               {/* Image */}
-              <div className="relative overflow-hidden" style={{ height: "280px" }}>
+              <div className="relative overflow-hidden flex-shrink-0" style={{ height: "480px" }}>
                 <motion.div
                   className="w-full h-full"
-                  whileHover={{ scale: 1.05 }}
+                  animate={{ scale: isHovered ? 1.07 : 1 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <div
@@ -101,78 +115,95 @@ export default function Suites() {
                     }}
                   />
                 </motion.div>
+
+                {/* Amber overlay on hover */}
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  animate={{ opacity: isHovered ? 1 : 0 }}
+                  transition={{ duration: 0.4 }}
+                  style={{ background: "linear-gradient(180deg, transparent 40%, rgba(8,6,2,0.85) 100%)" }}
+                />
               </div>
 
               {/* Card content */}
-              <div className="flex flex-col p-5">
-                {/* Location */}
-                <div className="flex items-start justify-between mb-2">
-                  <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
+              <div className="flex flex-col p-4">
+                {/* Name + rating */}
+                <div className="flex items-start justify-between mb-1">
+                  <p className="text-sm font-medium leading-snug" style={{ color: "rgba(255,255,255,0.9)" }}>
                     {room.name}
                   </p>
-                  <div className="flex items-center gap-1">
-                    <Star size={14} fill={gold} style={{ color: gold }} />
-                    <span className="text-sm" style={{ color: "rgba(255,255,255,0.85)" }}>{room.rating}</span>
+                  <div className="flex items-center gap-1 flex-shrink-0 ml-2">
+                    <Star size={12} fill={gold} style={{ color: gold }} />
+                    <span className="text-xs" style={{ color: "rgba(255,255,255,0.85)" }}>{room.rating}</span>
                   </div>
                 </div>
 
-                {/* Location + distance */}
-                <p className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.5)" }}>
+                {/* Location */}
+                <p className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.45)" }}>
                   {room.location}
                 </p>
 
                 {/* Divider */}
-                <div className="w-full h-px mb-3" style={{ background: "rgba(255,255,255,0.08)" }} />
+                <div className="w-full h-px mb-3" style={{ background: "rgba(255,255,255,0.07)" }} />
 
                 {/* Specs */}
-                <div className="flex items-center gap-3 text-xs mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>
+                <div className="flex items-center gap-2 text-xs mb-3" style={{ color: "rgba(255,255,255,0.4)" }}>
                   <span>{room.beds}</span>
                   <span>·</span>
                   <span>{room.guests}</span>
                 </div>
 
-                {/* Price */}
-                <div className="flex items-end justify-between">
-                  <div>
-                    <p className="text-xs tracking-widest uppercase mb-1" style={{ color: "rgba(255,255,255,0.3)" }}>
-                      From
-                    </p>
-                    <p
-                      className="font-light leading-none"
-                      style={{
-                        fontFamily: '"Cormorant Garamond", serif',
-                        fontSize: "1.75rem",
-                        color: gold,
-                        letterSpacing: "-0.02em",
-                      }}
-                    >
-                      ${room.price.toLocaleString()}
-                      <span className="text-xs ml-1" style={{ color: "rgba(200,185,150,0.4)" }}>
-                        / night
-                      </span>
-                    </p>
-                  </div>
+                {/* Tagline — only visible when expanded */}
+                <motion.p
+                  className="text-xs leading-relaxed mb-4 italic"
+                  style={{ color: "rgba(200,185,150,0.55)", fontFamily: '"Cormorant Garamond", serif', fontSize: "0.9rem" }}
+                  animate={{ opacity: isHovered ? 1 : 0, height: isHovered ? "auto" : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  &ldquo;{room.tagline}&rdquo;
+                </motion.p>
 
-                  <Link href={`/booking?room=${room.id}`} data-cursor="hover">
-                    <motion.button
-                      className="px-5 py-2.5 text-xs tracking-widest uppercase"
-                      style={{
-                        background: "rgba(212,168,67,0.1)",
-                        color: gold,
-                        border: "1px solid rgba(212,168,67,0.3)",
-                      }}
-                      whileHover={{ background: "rgba(212,168,67,0.2)", scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      Reserve
-                    </motion.button>
-                  </Link>
+                {/* Price + CTA */}
+                <div className="flex items-end justify-between mt-auto">
+                  <p
+                    className="font-light leading-none"
+                    style={{
+                      fontFamily: '"Cormorant Garamond", serif',
+                      fontSize: "1.5rem",
+                      color: gold,
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    ${room.price}
+                    <span className="text-xs ml-1" style={{ color: "rgba(200,185,150,0.4)" }}>/night</span>
+                  </p>
+
+                  <motion.div
+                    animate={{ opacity: isHovered ? 1 : 0.4, scale: isHovered ? 1 : 0.95 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Link href={`/booking?room=${room.id}`} data-cursor="hover">
+                      <motion.button
+                        className="px-3 py-2 text-xs tracking-widest uppercase"
+                        style={{
+                          background: isHovered ? "rgba(212,168,67,0.2)" : "rgba(212,168,67,0.08)",
+                          color: gold,
+                          border: "1px solid rgba(212,168,67,0.3)",
+                        }}
+                        whileTap={{ scale: 0.97 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        Reserve
+                      </motion.button>
+                    </Link>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
-          ))}
-        </motion.div>
+          );
+        })}
+      </motion.div>
+      <div className="relative w-full px-6 md:px-12 lg:px-20">
 
         {/* View all CTA */}
         <motion.div

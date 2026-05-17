@@ -16,7 +16,7 @@ export const testimonials: Testimonial[] = [
     title: "Creative Director, Voss Studio",
     location: "Berlin, Germany",
     quote:
-      "NOX AETHER does not feel like a hotel. It feels like the future has been folded into a room and handed to you. Nothing in my 40 countries of travel compares.",
+      "Brady Inn does not feel like a hotel. It feels like the future has been folded into a room and handed to you. Nothing in my 40 countries of travel compares.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80",
     stayType: "Obsidian Suite — 7 nights",
@@ -27,7 +27,7 @@ export const testimonials: Testimonial[] = [
     title: "Architect, Tanaka + Partners",
     location: "Tokyo, Japan",
     quote:
-      "As someone who designs spaces professionally, I rarely feel genuinely transported by architecture. NOX AETHER shattered that. The Chromatic Loft was my studio, my sanctuary, my muse.",
+      "As someone who designs spaces professionally, I rarely feel genuinely transported by architecture. Brady Inn shattered that. The Chromatic Loft was my studio, my sanctuary, my muse.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
     stayType: "Chromatic Loft — 4 nights",
@@ -49,7 +49,7 @@ export const testimonials: Testimonial[] = [
     title: "Film Director",
     location: "Paris, France",
     quote:
-      "Every frame in NOX AETHER is a composition. I checked in for three nights to decompress post-production and left six nights later, having written my next film.",
+      "Every frame in Brady Inn is a composition. I checked in for three nights to decompress post-production and left six nights later, having written my next film.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80",
     stayType: "Aether Residence — 6 nights",
@@ -60,7 +60,7 @@ export const testimonials: Testimonial[] = [
     title: "Collector & Philanthropist",
     location: "Dubai, UAE",
     quote:
-      "We host at the finest properties globally. NOX AETHER is the only place our guests consistently ask to return to before they have even left. That is the mark of something exceptional.",
+      "We host at the finest properties globally. Brady Inn is the only place our guests consistently ask to return to before they have even left. That is the mark of something exceptional.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=200&q=80",
     stayType: "Nebula Suite — 10 nights",

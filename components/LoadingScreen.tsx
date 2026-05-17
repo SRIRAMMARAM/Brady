@@ -128,7 +128,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.8 }}
               >
-                NOX AETHER
+                Brady Inn
               </motion.h1>
               <motion.p
                 className="text-xs tracking-[0.3em] uppercase mt-2"
