@@ -2,13 +2,35 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Star, Heart } from "lucide-react";
-import { rooms } from "@/data/rooms";
+import { useState, useEffect } from "react";
+import { ArrowLeft, Star } from "lucide-react";
+import { rooms as staticRooms } from "@/data/rooms";
 import Footer from "@/components/sections/Footer";
 import { staggerContainer, staggerItem, fadeUp } from "@/animations/variants";
+import { rooms as apiRooms, type RoomRead } from "@/lib/api";
 
 export default function RoomsPage() {
   const gold = "rgba(212,168,67,0.9)";
+  const [apiData, setApiData] = useState<RoomRead[] | null>(null);
+
+  useEffect(() => {
+    apiRooms.list()
+      .then((data) => setApiData(data))
+      .catch(() => { /* silently fall back to static data */ });
+  }, []);
+
+  // Merge: API provides live price + active status, static provides image/rating/location
+  const rooms = staticRooms
+    .map((room) => {
+      const live = apiData?.find((r) => r.name === room.name);
+      return {
+        ...room,
+        price:     live ? live.price_per_night : room.price,
+        available: live ? live.is_active       : true,
+        apiId:     live ? live.id              : null,
+      };
+    })
+    .filter((r) => r.available);
 
   return (
     <div style={{ backgroundColor: "#050508", minHeight: "100vh" }}>

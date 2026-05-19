@@ -7,14 +7,30 @@ import { ArrowLeft, Phone, Mail, MapPin, CheckCircle } from "lucide-react";
 import Footer from "@/components/sections/Footer";
 import { CONTACT_INFO } from "@/constants";
 import { staggerContainer, staggerItem, fadeUp } from "@/animations/variants";
+import { inquiries, ApiError } from "@/lib/api";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setApiError(null);
+    try {
+      await inquiries.submit({
+        name:    form.name,
+        email:   form.email,
+        message: form.subject ? `[${form.subject}] ${form.message}` : form.message,
+      });
+      setSubmitted(true);
+    } catch (e) {
+      setApiError(e instanceof ApiError ? e.message : "Failed to send. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const inputStyle = {
@@ -169,15 +185,22 @@ export default function ContactPage() {
                   />
                 </div>
 
+                {apiError && (
+                  <p className="text-xs px-3 py-2" style={{ background: "rgba(220,80,80,0.08)", border: "1px solid rgba(220,80,80,0.2)", color: "rgba(220,100,100,0.9)" }}>
+                    {apiError}
+                  </p>
+                )}
+
                 <motion.button
                   type="submit"
+                  disabled={submitting}
                   className="w-full py-4 text-xs tracking-[0.25em] uppercase"
-                  style={{ background: "linear-gradient(135deg, #7c3aed, #00e5ff)", color: "#f0f0f5", border: "none" }}
-                  whileHover={{ opacity: 0.9, scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
+                  style={{ background: submitting ? "rgba(255,255,255,0.1)" : "linear-gradient(135deg, #7c3aed, #00e5ff)", color: "#f0f0f5", border: "none", opacity: submitting ? 0.6 : 1 }}
+                  whileHover={submitting ? {} : { opacity: 0.9, scale: 1.01 }}
+                  whileTap={submitting ? {} : { scale: 0.99 }}
                   data-cursor="hover"
                 >
-                  Send Message
+                  {submitting ? "Sending…" : "Send Message"}
                 </motion.button>
               </form>
             )}

@@ -10,7 +10,7 @@ import {
 import Footer from "@/components/sections/Footer";
 import { rooms, intentMap, type StayIntent } from "@/data/rooms";
 import { useAuth, ApiError } from "@/contexts/AuthContext";
-import { userBookings, type PaymentMode } from "@/lib/api";
+import { userBookings, availability, type PaymentMode } from "@/lib/api";
 
 // ─── accent palette ───────────────────────────────────────────
 const accentPalette = {
@@ -68,8 +68,19 @@ export default function BookingPage() {
   const [refCode,   setRefCode]   = useState<string | null>(null);
   const [apiError,  setApiError]  = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [availableNames, setAvailableNames] = useState<string[] | null>(null);
 
   const { accessToken, signup, login } = useAuth();
+
+  async function goWithAvailability(from: number, to: number) {
+    if (from === 2 && to === 3 && checkin && checkout) {
+      try {
+        const avail = await availability.check(checkin, checkout, guests);
+        setAvailableNames(avail.map((r) => r.name));
+      } catch { setAvailableNames(null); }
+    }
+    go(to);
+  }
 
   const recommended = intent ? rooms.find((r) => r.id === intentMap[intent]) : null;
   const nights = nightCount(checkin, checkout);
@@ -235,7 +246,7 @@ export default function BookingPage() {
                   Back
                 </button>
                 <motion.button
-                  onClick={() => go(3)}
+                  onClick={() => goWithAvailability(2, 3)}
                   className="flex items-center gap-3 px-8 py-4 text-sm tracking-widest uppercase"
                   style={{ background: gold, color: "#080806", border: "none" }}
                   whileHover={{ scale: 1.03 }}
@@ -315,9 +326,21 @@ export default function BookingPage() {
               <h1 className="font-light mb-1 leading-tight" style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "clamp(2.5rem,5.5vw,5rem)", color: "rgba(245,235,200,0.95)", letterSpacing: "-0.02em" }}>
                 {recommended.name}
               </h1>
-              <p className="text-sm mb-8 italic" style={{ color: gold, fontFamily: '"Cormorant Garamond", serif', fontSize: "1.1rem" }}>
+              <p className="text-sm mb-4 italic" style={{ color: gold, fontFamily: '"Cormorant Garamond", serif', fontSize: "1.1rem" }}>
                 &ldquo;{recommended.tagline}&rdquo;
               </p>
+
+              {/* Availability notice */}
+              {availableNames !== null && !availableNames.includes(recommended.name) && (
+                <div className="mb-6 px-4 py-3 text-xs" style={{ background: "rgba(220,120,60,0.08)", border: "1px solid rgba(220,120,60,0.25)", color: "rgba(220,150,80,0.9)" }}>
+                  This room may not be available for your selected dates. You can still reserve and our team will confirm.
+                </div>
+              )}
+              {availableNames !== null && availableNames.includes(recommended.name) && (
+                <div className="mb-6 px-4 py-3 text-xs" style={{ background: "rgba(60,180,80,0.06)", border: "1px solid rgba(60,180,80,0.2)", color: "rgba(100,200,100,0.8)" }}>
+                  Available for your dates ✓
+                </div>
+              )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {/* image */}

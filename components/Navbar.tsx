@@ -3,12 +3,14 @@
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, BookOpen } from "lucide-react";
 import { NAV_LINKS, SITE_NAME } from "@/constants";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, logout } = useAuth();
   const { scrollY } = useScroll();
 
   const navOpacity = useTransform(scrollY, [0, 80], [0, 1]);
@@ -114,13 +116,36 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button */}
+          {/* CTA + Auth area */}
           <motion.div
-            className="hidden md:block"
+            className="hidden md:flex items-center gap-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
           >
+            {user && (
+              <>
+                <Link href="/my-bookings" data-cursor="hover">
+                  <motion.button
+                    className="flex items-center gap-2 px-4 py-2.5 text-xs tracking-[0.12em] uppercase"
+                    style={{ border: "1px solid rgba(212,168,67,0.2)", color: "rgba(212,168,67,0.7)", background: "transparent" }}
+                    whileHover={{ background: "rgba(212,168,67,0.08)", scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <BookOpen size={13} />
+                    My Bookings
+                  </motion.button>
+                </Link>
+                <motion.button
+                  onClick={logout}
+                  className="text-xs tracking-widest uppercase px-3 py-2"
+                  style={{ color: "rgba(200,185,150,0.3)", background: "transparent", border: "none", cursor: "pointer" }}
+                  whileHover={{ color: "rgba(200,185,150,0.6)" }}
+                >
+                  Sign out
+                </motion.button>
+              </>
+            )}
             <Link href="/booking" data-cursor="hover">
               <motion.button
                 className="relative px-6 py-2.5 text-xs tracking-[0.15em] uppercase overflow-hidden"
