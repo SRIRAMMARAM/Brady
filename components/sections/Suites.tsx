@@ -100,7 +100,7 @@ export default function Suites() {
               onMouseLeave={() => setHoveredId(null)}
             >
               {/* Image */}
-              <div className="relative overflow-hidden flex-shrink-0" style={{ height: "480px" }}>
+              <div className="relative overflow-hidden flex-shrink-0" style={{ height: "400px" }}>
                 <motion.div
                   className="w-full h-full"
                   animate={{ scale: isHovered ? 1.07 : 1 }}

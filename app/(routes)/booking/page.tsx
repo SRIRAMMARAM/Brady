@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import Footer from "@/components/sections/Footer";
 import { rooms, intentMap, type StayIntent } from "@/data/rooms";
+import { useAuth, ApiError } from "@/contexts/AuthContext";
+import { userBookings, type PaymentMode } from "@/lib/api";
 
 // ─── accent palette ───────────────────────────────────────────
 const accentPalette = {
@@ -59,7 +61,15 @@ export default function BookingPage() {
   const [intent,   setIntent]   = useState<StayIntent | null>(null);
   const [email,    setEmail]    = useState("");
   const [name,     setName]     = useState("");
+  const [phone,    setPhone]    = useState("");
+  const [password, setPassword] = useState("");
+  const [paymentMode, setPaymentMode] = useState<PaymentMode>("property");
   const [submitted, setSubmitted] = useState(false);
+  const [refCode,   setRefCode]   = useState<string | null>(null);
+  const [apiError,  setApiError]  = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const { accessToken, signup, login } = useAuth();
 
   const recommended = intent ? rooms.find((r) => r.id === intentMap[intent]) : null;
   const nights = nightCount(checkin, checkout);
@@ -361,7 +371,40 @@ export default function BookingPage() {
                     <p className="text-xs tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.2)" }}>Email Address</p>
                     <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="your@email.com" className="w-full px-4 py-3 text-sm outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
                   </div>
+                  <div>
+                    <p className="text-xs tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.2)" }}>Phone</p>
+                    <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" placeholder="+1 555 000 0000" className="w-full px-4 py-3 text-sm outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
+                  </div>
+                  <div>
+                    <p className="text-xs tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.2)" }}>Password</p>
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Create a password (min 8 chars)" className="w-full px-4 py-3 text-sm outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
+                  </div>
                 </div>
+
+                {/* Payment mode selector */}
+                <div className="flex gap-3 mb-4">
+                  {(["property", "online"] as PaymentMode[]).map((mode) => (
+                    <button
+                      key={mode}
+                      onClick={() => setPaymentMode(mode)}
+                      className="flex-1 py-2.5 text-xs tracking-widest uppercase"
+                      style={{
+                        background: paymentMode === mode ? "rgba(212,168,67,0.12)" : "transparent",
+                        border: `1px solid ${paymentMode === mode ? "rgba(212,168,67,0.4)" : "rgba(255,255,255,0.08)"}`,
+                        color: paymentMode === mode ? gold : "rgba(200,190,160,0.35)",
+                      }}
+                    >
+                      {mode === "property" ? "Pay at Property" : "Pay Online"}
+                    </button>
+                  ))}
+                </div>
+
+                {/* API error */}
+                {apiError && (
+                  <p className="text-xs mb-4 px-3 py-2" style={{ background: "rgba(220,80,80,0.08)", border: "1px solid rgba(220,80,80,0.2)", color: "rgba(220,100,100,0.9)" }}>
+                    {apiError}
+                  </p>
+                )}
 
                 <div className="flex items-center gap-3 text-xs mb-5 p-3" style={{ background: "rgba(212,168,67,0.05)", border: "1px solid rgba(212,168,67,0.1)" }}>
                   <Calendar size={13} style={{ color: gold }} />
@@ -376,14 +419,43 @@ export default function BookingPage() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <motion.button
-                  onClick={() => { if (name && email) setSubmitted(true); }}
-                  disabled={!name || !email}
+                  onClick={async () => {
+                    if (!name || !email || !phone || !password || !recommended) return;
+                    setSubmitting(true);
+                    setApiError(null);
+                    try {
+                      let token = accessToken;
+                      if (!token) {
+                        try { await signup(name, email, phone, password); }
+                        catch (e) {
+                          if (e instanceof ApiError && e.status === 409) {
+                            await login(email, password);
+                          } else { throw e; }
+                        }
+                        token = localStorage.getItem("brady_access_token");
+                      }
+                      if (!token) throw new Error("Authentication failed");
+                      const booking = await userBookings.create({
+                        room_id:      Number(recommended.id),
+                        check_in:     checkin,
+                        check_out:    checkout,
+                        payment_mode: paymentMode,
+                      }, token);
+                      setRefCode(booking.ref_code);
+                      setSubmitted(true);
+                    } catch (e) {
+                      setApiError(e instanceof ApiError ? e.message : "Something went wrong. Please try again.");
+                    } finally {
+                      setSubmitting(false);
+                    }
+                  }}
+                  disabled={!name || !email || !phone || !password || submitting}
                   className="flex-1 flex items-center justify-center gap-3 py-4 text-sm tracking-widest uppercase"
-                  style={{ background: name && email ? gold : "rgba(255,255,255,0.05)", color: name && email ? "#080806" : "rgba(255,255,255,0.2)", border: "none" }}
-                  whileHover={name && email ? { scale: 1.02 } : {}}
-                  whileTap={name && email ? { scale: 0.98 } : {}}
+                  style={{ background: (name && email && phone && password && !submitting) ? gold : "rgba(255,255,255,0.05)", color: (name && email && phone && password && !submitting) ? "#080806" : "rgba(255,255,255,0.2)", border: "none" }}
+                  whileHover={(name && email && phone && password && !submitting) ? { scale: 1.02 } : {}}
+                  whileTap={(name && email && phone && password && !submitting) ? { scale: 0.98 } : {}}
                 >
-                  Reserve {recommended.name}
+                  {submitting ? "Reserving…" : `Reserve ${recommended.name}`}
                 </motion.button>
                 <button onClick={() => go(3)} className="px-8 py-4 text-xs tracking-widest uppercase" style={{ border: "1px solid rgba(255,255,255,0.08)", color: "rgba(200,190,160,0.35)", background: "transparent" }}>
                   Different vibe?
@@ -404,6 +476,11 @@ export default function BookingPage() {
               <p className="text-sm mb-2 max-w-sm" style={{ color: "rgba(200,190,160,0.55)" }}>
                 {recommended?.name} · {checkin} to {checkout} · {guests} {guests === 1 ? "guest" : "guests"}
               </p>
+              {refCode && (
+                <p className="text-sm mb-2 font-mono" style={{ color: gold }}>
+                  Ref: {refCode}
+                </p>
+              )}
               <p className="text-xs mb-10" style={{ color: "rgba(212,168,67,0.45)" }}>
                 Confirmation will arrive at {email}
               </p>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -40,7 +41,9 @@ export default function RootLayout({
       style={{ scrollBehavior: "auto" }}
     >
       <body style={{ backgroundColor: "#080604", color: "#f5efe0", overflowX: "hidden" }}>
-        <ClientLayout>{children}</ClientLayout>
+        <AuthProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </AuthProvider>
       </body>
     </html>
   );
