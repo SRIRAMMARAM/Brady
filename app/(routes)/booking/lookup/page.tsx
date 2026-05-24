@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -19,6 +20,14 @@ function StatusIcon({ status }: { status: BookingRead["booking_status"] }) {
 }
 
 export default function BookingLookupPage() {
+  return (
+    <Suspense>
+      <BookingLookupContent />
+    </Suspense>
+  );
+}
+
+function BookingLookupContent() {
   const searchParams = useSearchParams();
   const [refInput, setRefInput]   = useState(searchParams.get("ref") ?? "");
   const [booking,  setBooking]    = useState<BookingRead | null>(null);
@@ -154,7 +163,17 @@ export default function BookingLookupPage() {
                   { label: "Nights",     value: `${booking.nights}`,            icon: <Moon size={13} /> },
                   { label: "Guests",     value: `${booking.room.max_guests} max`, icon: <Users size={13} /> },
                   { label: "Total",      value: `$${booking.total_price.toLocaleString()}`, icon: null },
-                  { label: "Payment",    value: booking.payment_status === "paid" ? "Paid" : "Pay at property", icon: null },
+                  {
+                    label: "Payment",
+                    value: booking.payment_status === "paid"
+                      ? "Paid ✓"
+                      : booking.payment_status === "refunded"
+                        ? "Refunded"
+                        : booking.payment_mode === "online"
+                          ? "Online – Pending"
+                          : "Pay at Property",
+                    icon: null,
+                  },
                 ].map(({ label, value, icon }) => (
                   <div key={label} className="p-4" style={{ background: "rgba(10,10,8,0.5)", border: "1px solid rgba(255,255,255,0.06)" }}>
                     <p className="text-xs tracking-widest uppercase mb-1 flex items-center gap-1.5" style={{ color: "rgba(255,255,255,0.2)" }}>

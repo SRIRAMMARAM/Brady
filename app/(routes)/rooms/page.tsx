@@ -8,6 +8,7 @@ import { rooms as staticRooms } from "@/data/rooms";
 import Footer from "@/components/sections/Footer";
 import { staggerContainer, staggerItem, fadeUp } from "@/animations/variants";
 import { rooms as apiRooms, type RoomRead } from "@/lib/api";
+import { normalizeRoomName } from "@/lib/utils";
 
 export default function RoomsPage() {
   const gold = "rgba(212,168,67,0.9)";
@@ -22,7 +23,7 @@ export default function RoomsPage() {
   // Merge: API provides live price + active status, static provides image/rating/location
   const rooms = staticRooms
     .map((room) => {
-      const live = apiData?.find((r) => r.name === room.name);
+      const live = apiData?.find((r) => normalizeRoomName(r.name) === normalizeRoomName(room.name));
       return {
         ...room,
         price:     live ? live.price_per_night : room.price,
@@ -115,31 +116,35 @@ export default function RoomsPage() {
                 }}
                 whileHover={{ y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
               >
-                {/* Image */}
-                <div className="relative overflow-hidden" style={{ height: "280px" }}>
-                  <motion.div
-                    className="w-full h-full"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <div
+                {/* Image — clickable to detail page */}
+                <Link href={`/rooms/${room.id}`}>
+                  <div className="relative overflow-hidden" style={{ height: "280px" }}>
+                    <motion.div
                       className="w-full h-full"
-                      style={{
-                        backgroundImage: `url('${room.image}')`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                    />
-                  </motion.div>
-                </div>
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <div
+                        className="w-full h-full"
+                        style={{
+                          backgroundImage: `url('${room.image}')`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      />
+                    </motion.div>
+                  </div>
+                </Link>
 
                 {/* Card content */}
                 <div className="flex flex-col p-5">
                   {/* Name + rating */}
                   <div className="flex items-start justify-between mb-2">
-                    <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
-                      {room.name}
-                    </p>
+                    <Link href={`/rooms/${room.id}`} className="hover:opacity-80 transition-opacity">
+                      <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
+                        {room.name}
+                      </p>
+                    </Link>
                     <div className="flex items-center gap-1">
                       <Star size={14} fill={gold} style={{ color: gold }} />
                       <span className="text-sm" style={{ color: "rgba(255,255,255,0.85)" }}>{room.rating}</span>

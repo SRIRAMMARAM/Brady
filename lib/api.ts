@@ -260,7 +260,6 @@ export const userBookings = {
 export interface StripeConfig {
   publishable_key?: string;
   publishableKey?: string;
-  [key: string]: unknown;
 }
 
 export const stripe = {

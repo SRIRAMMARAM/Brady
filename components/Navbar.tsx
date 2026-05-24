@@ -123,7 +123,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
           >
-            {user && (
+            {user ? (
               <>
                 {user.role === "admin" && (
                   <Link href="/admin" data-cursor="hover">
@@ -158,6 +158,16 @@ export default function Navbar() {
                   Sign out
                 </motion.button>
               </>
+            ) : (
+              <Link href="/login" data-cursor="hover">
+                <motion.button
+                  className="text-xs tracking-widest uppercase px-3 py-2"
+                  style={{ color: "rgba(200,185,150,0.45)", background: "transparent", border: "none", cursor: "pointer" }}
+                  whileHover={{ color: "rgba(200,185,150,0.8)" }}
+                >
+                  Sign In
+                </motion.button>
+              </Link>
             )}
             <Link href="/booking" data-cursor="hover">
               <motion.button
@@ -270,7 +280,7 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="mt-8"
+                className="mt-8 flex flex-col items-center gap-3"
               >
                 <Link href="/booking" onClick={() => setMobileOpen(false)}>
                   <button
@@ -284,6 +294,36 @@ export default function Navbar() {
                     Reserve Now
                   </button>
                 </Link>
+
+                {user ? (
+                  <>
+                    {user.role === "admin" && (
+                      <Link href="/admin" onClick={() => setMobileOpen(false)}>
+                        <button className="flex items-center gap-2 px-8 py-2.5 text-xs tracking-widest uppercase" style={{ border: "1px solid rgba(180,140,255,0.25)", color: "rgba(200,170,255,0.85)", background: "transparent" }}>
+                          <Shield size={13} /> Admin
+                        </button>
+                      </Link>
+                    )}
+                    <Link href="/my-bookings" onClick={() => setMobileOpen(false)}>
+                      <button className="flex items-center gap-2 px-8 py-2.5 text-xs tracking-widest uppercase" style={{ border: "1px solid rgba(212,168,67,0.25)", color: "rgba(212,168,67,0.7)", background: "transparent" }}>
+                        <BookOpen size={13} /> My Bookings
+                      </button>
+                    </Link>
+                    <button
+                      onClick={() => { logout(); setMobileOpen(false); }}
+                      className="text-xs tracking-widest uppercase px-8 py-2.5"
+                      style={{ color: "rgba(200,185,150,0.35)", background: "transparent", border: "1px solid rgba(255,255,255,0.06)", cursor: "pointer" }}
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <Link href="/login" onClick={() => setMobileOpen(false)}>
+                    <button className="text-xs tracking-widest uppercase px-8 py-2.5" style={{ border: "1px solid rgba(255,255,255,0.08)", color: "rgba(200,185,150,0.5)", background: "transparent" }}>
+                      Sign In
+                    </button>
+                  </Link>
+                )}
               </motion.div>
             </div>
 

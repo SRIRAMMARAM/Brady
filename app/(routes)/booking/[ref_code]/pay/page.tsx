@@ -20,7 +20,7 @@ function CheckoutForm({ booking }: { booking: BookingRead }) {
   const [submitting, setSubmitting] = useState(false);
   const [error,      setError]      = useState<string | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!stripe || !elements) return;
     setSubmitting(true); setError(null);
