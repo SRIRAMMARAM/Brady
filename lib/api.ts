@@ -140,18 +140,40 @@ export class ApiError extends Error {
   }
 }
 
-async function req<T>(
-  path: string,
-  options: RequestInit = {},
-  token?: string,
-): Promise<T> {
+// ─── Token refresh hook (set by AuthContext on mount) ────────────────────
+// When a request with a Bearer token receives 401, this function is called
+// to obtain a fresh access token. If it returns a string, the original
+// request is retried once with the new token. If it returns null, the
+// original 401 is propagated.
+let tokenRefresher: (() => Promise<string | null>) | null = null;
+
+export function setTokenRefresher(fn: (() => Promise<string | null>) | null) {
+  tokenRefresher = fn;
+}
+
+async function doFetch(path: string, options: RequestInit, token?: string) {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers as Record<string, string>),
   };
   if (token) headers["Authorization"] = `Bearer ${token}`;
+  return fetch(`${BASE}${path}`, { ...options, headers });
+}
 
-  const res = await fetch(`${BASE}${path}`, { ...options, headers });
+async function req<T>(
+  path: string,
+  options: RequestInit = {},
+  token?: string,
+): Promise<T> {
+  let res = await doFetch(path, options, token);
+
+  // Auto-refresh on 401 if we sent an auth header and a refresher is registered
+  if (res.status === 401 && token && tokenRefresher) {
+    const newToken = await tokenRefresher();
+    if (newToken) {
+      res = await doFetch(path, options, newToken);
+    }
+  }
 
   if (!res.ok) {
     let message = res.statusText;
@@ -288,7 +310,11 @@ export const adminBookings = {
     req<void>(`/admin/bookings/${ref_code}`, { method: "DELETE" }, token),
 
   markPaid: (ref_code: string, token: string) =>
-    req<void>(`/admin/bookings/${ref_code}/mark-paid`, { method: "PATCH" }, token),
+    req<{ ref_code: string; payment_status: PaymentStatus }>(
+      `/admin/bookings/${ref_code}/mark-paid`,
+      { method: "PATCH" },
+      token,
+    ),
 
   refund: (ref_code: string, token: string) =>
     req<RefundResponse>(`/admin/bookings/${ref_code}/refund`, { method: "POST" }, token),

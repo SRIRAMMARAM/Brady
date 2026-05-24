@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft, ArrowRight, Calendar, CheckCircle,
   Heart, Wind, Flame, Users2, Moon,
@@ -53,6 +54,7 @@ const fieldBase = {
 };
 
 export default function BookingPage() {
+  const router = useRouter();
   const [step, setStep]       = useState(1);
   const [dir,  setDir]        = useState(1);
   const [checkin,  setCheckin]  = useState("");
@@ -464,6 +466,12 @@ export default function BookingPage() {
                         check_out:    checkout,
                         payment_mode: paymentMode,
                       }, token);
+                      // Online bookings: jump straight to Stripe checkout.
+                      // Property bookings: show in-page confirmation with ref code.
+                      if (paymentMode === "online") {
+                        router.push(`/booking/${booking.ref_code}/pay`);
+                        return;
+                      }
                       setRefCode(booking.ref_code);
                       setSubmitted(true);
                     } catch (e) {

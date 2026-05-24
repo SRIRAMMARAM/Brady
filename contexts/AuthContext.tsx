@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
-import { auth, ApiError, type UserRead } from "@/lib/api";
+import { auth, ApiError, setTokenRefresher, type UserRead } from "@/lib/api";
 
 // ─── Token storage helpers (localStorage) ────────────────────────────────
 
@@ -45,6 +45,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user,        setUser]        = useState<UserRead | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading,   setIsLoading]   = useState(true);
+
+  // Register the global 401 refresh interceptor
+  useEffect(() => {
+    setTokenRefresher(async () => {
+      const refresh = loadToken(KEYS.refresh);
+      if (!refresh) return null;
+      try {
+        const res = await auth.refresh(refresh);
+        localStorage.setItem(KEYS.access, res.access_token);
+        setAccessToken(res.access_token);
+        return res.access_token;
+      } catch {
+        clearTokens();
+        setUser(null);
+        setAccessToken(null);
+        return null;
+      }
+    });
+    return () => setTokenRefresher(null);
+  }, []);
 
   // Restore session on mount
   useEffect(() => {
