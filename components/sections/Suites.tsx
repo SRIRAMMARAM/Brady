@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Star } from "lucide-react";
 import { featuredRooms } from "@/data/rooms";
 import { useScrollAnimationConfig } from "@/hooks/useScrollAnimation";
 import { staggerContainer, staggerItem, fadeUp } from "@/animations/variants";
 
 export default function Suites() {
+  const router = useRouter();
   const header = useScrollAnimationConfig(0.2);
   const cards = useScrollAnimationConfig(0.1);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -88,6 +90,9 @@ export default function Suites() {
             <motion.div
               key={room.id}
               variants={staggerItem}
+              role="button"
+              tabIndex={0}
+              data-cursor="hover"
               className="relative flex flex-col overflow-hidden rounded-lg cursor-pointer"
               style={{
                 flex: isHovered ? "1.8 1 0" : isShrunk ? "0.7 1 0" : "1 1 0",
@@ -98,6 +103,8 @@ export default function Suites() {
               }}
               onMouseEnter={() => setHoveredId(room.id)}
               onMouseLeave={() => setHoveredId(null)}
+              onClick={() => router.push(`/rooms/${room.id}`)}
+              onKeyDown={(e) => { if (e.key === "Enter") router.push(`/rooms/${room.id}`); }}
             >
               {/* Image */}
               <div className="relative overflow-hidden flex-shrink-0" style={{ height: "400px" }}>
@@ -182,7 +189,11 @@ export default function Suites() {
                     animate={{ opacity: isHovered ? 1 : 0.4, scale: isHovered ? 1 : 0.95 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Link href={`/booking?room=${room.id}`} data-cursor="hover">
+                    <Link
+                      href={`/booking?room=${room.id}`}
+                      data-cursor="hover"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <motion.button
                         className="px-3 py-2 text-xs tracking-widest uppercase"
                         style={{

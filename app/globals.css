@@ -86,6 +86,74 @@ body {
   cursor: none;
 }
 
+/* Force-hide the OS cursor on every element so only CursorGlow renders */
+*,
+*::before,
+*::after,
+a,
+button,
+input,
+select,
+textarea,
+label,
+[role="button"] {
+  cursor: none !important;
+}
+
+/* ── Soft corners everywhere ──────────────────────────────────────────────
+   Default radius for all common interactive / container elements so nothing
+   in the UI has razor-sharp 0px corners. Components can opt-out individually
+   by setting their own border-radius (or `rounded-full`, `rounded-none`).
+*/
+:root {
+  --radius-soft: 14px;
+  --radius-pill: 9999px;
+}
+
+button,
+input,
+select,
+textarea,
+[role="button"] {
+  border-radius: var(--radius-soft);
+}
+
+/* Round any element with an inline border / background that looks like a card */
+section > div[style*="border"],
+div[style*="background: rgba"][style*="border"] {
+  border-radius: var(--radius-soft);
+}
+
+/* Round images, video, and common media */
+img,
+video,
+canvas,
+svg.rounded-media {
+  border-radius: var(--radius-soft);
+}
+
+/* Date inputs picker indicator should also feel soft */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  border-radius: var(--radius-soft);
+}
+
+/* ── Sticky footer ────────────────────────────────────────────────────────
+   Page wrappers commonly use `min-height: 100vh` and place <Footer /> as
+   the last child. When content is short, the wrapper stays full-height
+   leaving empty space *below* the footer. Convert any direct page wrapper
+   under <main> into a flex-column; the Footer component itself uses
+   `mt-auto` to pin to the bottom whenever its parent is a flex column.
+*/
+main,
+main > div {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  min-height: calc(100vh - 0px);
+}
+
 /* Glassmorphism Utility */
 .glass {
   background: rgba(13, 13, 20, 0.6);

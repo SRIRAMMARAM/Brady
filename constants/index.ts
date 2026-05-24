@@ -6,7 +6,7 @@ export const SITE_DESCRIPTION =
 export const NAV_LINKS = [
   { label: "Rooms", href: "/rooms" },
   { label: "Experience", href: "/experience" },
-  { label: "Dining", href: "/dining" },
+  { label: "Amenities", href: "/amenities" },
   { label: "Gallery", href: "/gallery" },
   { label: "Contact", href: "/contact" },
 ];
@@ -20,8 +20,8 @@ export const SOCIAL_LINKS = [
 export const CONTACT_INFO = {
   phone: "+1 (800) BCA-CASA",
   email: "hello@bradycasainn.com",
-  address: "1 Brady Creek Road, Mountain View, CA 94035",
-  coordinates: "37.3861° N, 122.0839° W",
+  address: "1 Brady Creek Road, Brady, TX 76825",
+  coordinates: "31.1523° N, 99.3367° W",
 };
 
 export const AMENITIES_ICONS = [

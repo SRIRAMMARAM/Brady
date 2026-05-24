@@ -11,16 +11,16 @@ const galleryImages = [
   { id: 1, src: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=80", label: "Obsidian Suite", cat: "Suites", span: "col-span-1 md:col-span-2 row-span-2" },
   { id: 2, src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900&q=80", label: "Aether Residence", cat: "Suites", span: "col-span-1" },
   { id: 3, src: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=900&q=80", label: "Chromatic Loft", cat: "Suites", span: "col-span-1" },
-  { id: 4, src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80", label: "NOCT Restaurant", cat: "Dining", span: "col-span-1 md:col-span-2" },
+  { id: 4, src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80", label: "Custom Coffee Service", cat: "Amenities", span: "col-span-1 md:col-span-2" },
   { id: 5, src: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=900&q=80", label: "Aether Spa", cat: "Wellness", span: "col-span-1" },
   { id: 6, src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=900&q=80", label: "Infinity Pool", cat: "Amenities", span: "col-span-1" },
   { id: 7, src: "https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=1200&q=80", label: "Aerial Flight", cat: "Experiences", span: "col-span-1 md:col-span-2 row-span-2" },
   { id: 8, src: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=900&q=80", label: "Nebula Suite", cat: "Suites", span: "col-span-1" },
-  { id: 9, src: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=900&q=80", label: "VANTA Bar", cat: "Dining", span: "col-span-1" },
+  { id: 9, src: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=900&q=80", label: "Sports Simulator", cat: "Amenities", span: "col-span-1" },
   { id: 10, src: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=900&q=80", label: "Observatory Night", cat: "Experiences", span: "col-span-1 md:col-span-2" },
 ];
 
-const cats = ["All", "Suites", "Dining", "Wellness", "Amenities", "Experiences"];
+const cats = ["All", "Suites", "Amenities", "Wellness", "Experiences"];
 
 export default function GalleryPage() {
   const [activeFilter, setActiveFilter] = useState("All");

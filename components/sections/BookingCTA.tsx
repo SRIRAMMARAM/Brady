@@ -180,6 +180,10 @@ export default function BookingCTA() {
                           background: "rgba(13,13,20,0.8)",
                           border: "1px solid rgba(255,255,255,0.07)",
                         }}
+                        onClick={(e) => {
+                          const i = (e.currentTarget as HTMLDivElement).querySelector('input[type="date"]') as HTMLInputElement | null;
+                          i?.showPicker?.(); i?.focus();
+                        }}
                       >
                         <Calendar size={14} style={{ color: "rgba(212,168,67,0.5)" }} />
                         <input
@@ -200,6 +204,10 @@ export default function BookingCTA() {
                         style={{
                           background: "rgba(10,7,3,0.8)",
                           border: "1px solid rgba(212,168,67,0.12)",
+                        }}
+                        onClick={(e) => {
+                          const i = (e.currentTarget as HTMLDivElement).querySelector('input[type="date"]') as HTMLInputElement | null;
+                          i?.showPicker?.(); i?.focus();
                         }}
                       >
                         <Calendar size={14} style={{ color: "rgba(212,168,67,0.5)" }} />

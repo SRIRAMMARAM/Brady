@@ -58,7 +58,7 @@ function BookingContent() {
   const [checkout,     setCheckout]     = useState("");
   const [guests,       setGuests]       = useState(2);
   const [selectedRoom, setSelectedRoom] = useState<RoomRead | null>(null);
-  const [paymentMode,  setPaymentMode]  = useState<PaymentMode>("property");
+  const [paymentMode,  setPaymentMode]  = useState<PaymentMode>("online");
   const [name,         setName]         = useState("");
   const [email,        setEmail]        = useState("");
   const [phone,        setPhone]        = useState("");
@@ -148,7 +148,7 @@ function BookingContent() {
   const canSubmit = !submitting && !!selectedRoom && (!!user || (!!name && !!email && !!phone && !!password));
 
   return (
-    <div style={{ backgroundColor: "#080806", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "#080806", minHeight: "100dvh" }}>
       <div
         className="fixed inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 30% 30%, rgba(212,168,67,0.07) 0%, transparent 50%), radial-gradient(ellipse at 75% 70%, rgba(180,100,50,0.05) 0%, transparent 50%)" }}
@@ -203,25 +203,35 @@ function BookingContent() {
               {/* ── STEP 1: DATES ──────────────────────────────── */}
               {step === 1 && (
                 <motion.div key="step1" {...slide(dir)}>
-                  <h1
-                    className="font-light mb-3 leading-tight"
-                    style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "clamp(3rem,4.5vw,5.5rem)", color: "rgba(245,235,200,0.95)", letterSpacing: "-0.03em" }}
-                  >
-                    When does your<br />story begin?
-                  </h1>
-                  <p className="text-base mb-12" style={{ color: "rgba(200,185,150,0.5)" }}>
-                    Pick your dates and we&apos;ll take care of the rest.
-                  </p>
+                  <div className="mb-20">
+                    <h1
+                      className="font-light leading-tight mb-6"
+                      style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "clamp(3.5rem,5.5vw,6.5rem)", color: "rgba(245,235,200,0.95)", letterSpacing: "-0.03em" }}
+                    >
+                      When does your<br />story begin?
+                    </h1>
+                    <p className="text-lg mb-16 max-w-md" style={{ color: "rgba(200,185,150,0.5)" }}>
+                      Pick your dates and we&apos;ll take care of the rest.
+                    </p>
+                  </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-16">
                     {[
                       { label: "Check-in",  val: checkin,  set: setCheckin,  min: today       },
                       { label: "Check-out", val: checkout, set: setCheckout, min: minCheckout },
                     ].map(({ label, val, set, min }) => (
                       <div key={label}>
                         <p className="text-xs tracking-widest uppercase mb-3" style={{ color: "rgba(212,168,67,0.55)" }}>{label}</p>
-                        <div className="relative flex items-center px-5 py-5" style={fieldBase}>
-                          <Calendar size={18} className="mr-4 flex-shrink-0" style={{ color: gold }} />
+                        <div
+                          className="relative flex items-center px-7 py-6"
+                          style={fieldBase}
+                          onClick={(e) => {
+                            const input = (e.currentTarget as HTMLDivElement).querySelector('input[type="date"]') as HTMLInputElement | null;
+                            input?.showPicker?.();
+                            input?.focus();
+                          }}
+                        >
+                          <Calendar size={20} className="mr-5 flex-shrink-0" style={{ color: gold }} />
                           <input
                             type="date"
                             value={val}
@@ -232,7 +242,7 @@ function BookingContent() {
                                 setCheckout("");
                               }
                             }}
-                            className="w-full bg-transparent text-base outline-none"
+                            className="w-full bg-transparent text-lg outline-none"
                             style={{ color: "rgba(240,235,220,0.85)", colorScheme: "dark" }}
                           />
                         </div>
@@ -244,23 +254,23 @@ function BookingContent() {
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="inline-flex items-center gap-3 px-5 py-3 mb-8"
+                      className="inline-flex items-center gap-4 px-6 py-4 mb-12"
                       style={{ background: "rgba(212,168,67,0.08)", border: "1px solid rgba(212,168,67,0.2)" }}
                     >
-                      <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "1.6rem", color: gold }}>{nights}</span>
-                      <span className="text-xs" style={{ color: "rgba(212,168,67,0.6)" }}>{nights === 1 ? "night" : "nights"} selected</span>
+                      <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "2rem", color: gold }}>{nights}</span>
+                      <span className="text-sm" style={{ color: "rgba(212,168,67,0.6)" }}>{nights === 1 ? "night" : "nights"} selected</span>
                     </motion.div>
                   )}
 
                   <motion.button
                     onClick={() => go(2)}
                     disabled={!checkin || !checkout || nights <= 0}
-                    className="flex items-center gap-3 px-8 py-4 text-sm tracking-widest uppercase"
+                    className="flex items-center gap-4 px-10 py-5 text-sm tracking-widest uppercase"
                     style={{ background: checkin && checkout && nights > 0 ? gold : "rgba(255,255,255,0.05)", color: checkin && checkout && nights > 0 ? "#080806" : "rgba(255,255,255,0.2)", border: "none", cursor: checkin && checkout && nights > 0 ? "pointer" : "not-allowed" }}
-                    whileHover={checkin && checkout && nights > 0 ? { scale: 1.03 } : {}}
-                    whileTap={checkin && checkout && nights > 0 ? { scale: 0.97 } : {}}
+                    whileHover={checkin && checkout && nights > 0 ? { scale: 1.02 } : {}}
+                    whileTap={checkin && checkout && nights > 0 ? { scale: 0.98 } : {}}
                   >
-                    Continue <ArrowRight size={16} />
+                    Continue <ArrowRight size={18} />
                   </motion.button>
                 </motion.div>
               )}
@@ -268,47 +278,49 @@ function BookingContent() {
               {/* ── STEP 2: GUESTS ─────────────────────────────── */}
               {step === 2 && (
                 <motion.div key="step2" {...slide(dir)}>
-                  <h1
-                    className="font-light mb-3 leading-tight"
-                    style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "clamp(3rem,4.5vw,5.5rem)", color: "rgba(245,235,200,0.95)", letterSpacing: "-0.03em" }}
-                  >
-                    Who&apos;s joining<br />your story?
-                  </h1>
-                  <p className="text-base mb-14" style={{ color: "rgba(200,185,150,0.5)" }}>
-                    Tell us how many people are coming along.
-                  </p>
+                  <div className="mb-20">
+                    <h1
+                      className="font-light leading-tight mb-6"
+                      style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "clamp(3.5rem,5.5vw,6.5rem)", color: "rgba(245,235,200,0.95)", letterSpacing: "-0.03em" }}
+                    >
+                      Who&apos;s joining<br />your story?
+                    </h1>
+                    <p className="text-lg max-w-md" style={{ color: "rgba(200,185,150,0.5)" }}>
+                      Tell us how many people are coming along.
+                    </p>
+                  </div>
 
-                  <div className="flex items-center gap-8 mb-6">
+                  <div className="flex items-center gap-12 mb-10">
                     <motion.button
                       onClick={() => setGuests(Math.max(1, guests - 1))}
-                      className="w-14 h-14 flex items-center justify-center text-2xl"
+                      className="w-16 h-16 flex items-center justify-center text-3xl"
                       style={{ border: "1px solid rgba(212,168,67,0.25)", color: gold, background: "transparent" }}
                       whileHover={{ scale: 1.1, borderColor: gold }}
                       whileTap={{ scale: 0.9 }}
                     >–</motion.button>
 
-                    <div className="text-center">
+                    <div className="text-center min-w-[120px]">
                       <motion.p
                         key={guests}
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "5rem", color: gold, lineHeight: 1, letterSpacing: "-0.04em" }}
+                        style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "6rem", color: gold, lineHeight: 1, letterSpacing: "-0.04em" }}
                       >{guests}</motion.p>
-                      <p className="text-xs tracking-widest uppercase mt-1" style={{ color: "rgba(212,168,67,0.4)" }}>
+                      <p className="text-xs tracking-widest uppercase mt-3" style={{ color: "rgba(212,168,67,0.4)" }}>
                         {guests === 1 ? "Guest" : "Guests"}
                       </p>
                     </div>
 
                     <motion.button
                       onClick={() => setGuests(Math.min(8, guests + 1))}
-                      className="w-14 h-14 flex items-center justify-center text-2xl"
+                      className="w-16 h-16 flex items-center justify-center text-3xl"
                       style={{ border: "1px solid rgba(212,168,67,0.25)", color: gold, background: "transparent" }}
                       whileHover={{ scale: 1.1, borderColor: gold }}
                       whileTap={{ scale: 0.9 }}
                     >+</motion.button>
                   </div>
 
-                  <p className="text-sm mb-10" style={{ color: "rgba(200,185,150,0.35)" }}>
+                  <p className="text-base mb-16" style={{ color: "rgba(200,185,150,0.45)" }}>
                     {guests === 1
                       ? "Just you. Sounds peaceful."
                       : guests === 2
@@ -321,7 +333,7 @@ function BookingContent() {
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => go(1)}
-                      className="text-xs tracking-widest uppercase px-6 py-4"
+                      className="text-xs tracking-widest uppercase px-8 py-5"
                       style={{ border: "1px solid rgba(255,255,255,0.08)", color: "rgba(200,190,160,0.35)", background: "transparent" }}
                     >
                       Back
@@ -329,12 +341,12 @@ function BookingContent() {
                     <motion.button
                       onClick={goFromGuests}
                       disabled={checking}
-                      className="flex items-center gap-3 px-8 py-4 text-sm tracking-widest uppercase"
+                      className="flex items-center gap-4 px-10 py-5 text-sm tracking-widest uppercase"
                       style={{ background: checking ? "rgba(212,168,67,0.4)" : gold, color: "#080806", border: "none" }}
-                      whileHover={checking ? {} : { scale: 1.03 }}
-                      whileTap={checking ? {} : { scale: 0.97 }}
+                      whileHover={checking ? {} : { scale: 1.02 }}
+                      whileTap={checking ? {} : { scale: 0.98 }}
                     >
-                      {checking ? "Checking…" : <>Continue <ArrowRight size={16} /></>}
+                      {checking ? "Checking…" : <>Continue <ArrowRight size={18} /></>}
                     </motion.button>
                   </div>
                 </motion.div>
@@ -343,24 +355,26 @@ function BookingContent() {
               {/* ── STEP 3: ROOM PICKER ─────────────────────────── */}
               {step === 3 && (
                 <motion.div key="step3" {...slide(dir)}>
-                  <h1
-                    className="font-light mb-3 leading-tight"
-                    style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "clamp(3rem,4.5vw,5.5rem)", color: "rgba(245,235,200,0.95)", letterSpacing: "-0.03em" }}
-                  >
-                    Choose<br />your room
-                  </h1>
-                  <p className="text-base mb-8" style={{ color: "rgba(200,185,150,0.5)" }}>
-                    {availableIds !== null
-                      ? `${availableIds.size} room${availableIds.size !== 1 ? "s" : ""} available for your dates`
-                      : `${guests} guest${guests !== 1 ? "s" : ""} · ${nights} ${nights === 1 ? "night" : "nights"}`}
-                  </p>
+                  <div className="mb-14">
+                    <h1
+                      className="font-light leading-tight mb-6"
+                      style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "clamp(3.5rem,5.5vw,6.5rem)", color: "rgba(245,235,200,0.95)", letterSpacing: "-0.03em" }}
+                    >
+                      Choose<br />your room
+                    </h1>
+                    <p className="text-lg max-w-md" style={{ color: "rgba(200,185,150,0.5)" }}>
+                      {availableIds !== null
+                        ? `${availableIds.size} room${availableIds.size !== 1 ? "s" : ""} available for your dates`
+                        : `${guests} guest${guests !== 1 ? "s" : ""} · ${nights} ${nights === 1 ? "night" : "nights"}`}
+                    </p>
+                  </div>
 
                   {!apiRoomList ? (
                     <div className="flex justify-center py-12">
                       <div className="w-5 h-5 border animate-spin" style={{ borderColor: "rgba(212,168,67,0.3)", borderTopColor: gold }} />
                     </div>
                   ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-14">
                     {apiRoomList.map((room) => {
                       const isAvailable = availableIds === null || availableIds.has(room.id);
                       const isSelected  = selectedRoom?.id === room.id;
@@ -386,7 +400,7 @@ function BookingContent() {
                             />
                             <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(8,8,6,0.65) 100%)" }} />
                             {availableIds !== null && isAvailable && (
-                              <div className="absolute top-2 right-2 px-2 py-0.5 text-xs" style={{ background: "rgba(60,180,80,0.15)", border: "1px solid rgba(60,180,80,0.3)", color: "rgba(100,200,100,0.9)" }}>
+                              <div className="absolute top-2 right-2 px-2 py-0.5 text-xs" style={{ background: "rgba(212,168,67,0.15)", border: "1px solid rgba(212,168,67,0.4)", color: "rgba(245,215,140,0.95)" }}>
                                 Available
                               </div>
                             )}
@@ -428,7 +442,7 @@ function BookingContent() {
                   <div className="flex items-center gap-4">
                     <button
                       onClick={() => go(2)}
-                      className="text-xs tracking-widest uppercase px-6 py-4"
+                      className="text-xs tracking-widest uppercase px-8 py-5"
                       style={{ border: "1px solid rgba(255,255,255,0.08)", color: "rgba(200,190,160,0.35)", background: "transparent" }}
                     >
                       Back
@@ -436,12 +450,12 @@ function BookingContent() {
                     <motion.button
                       onClick={() => go(4)}
                       disabled={!selectedRoom}
-                      className="flex items-center gap-3 px-8 py-4 text-sm tracking-widest uppercase"
+                      className="flex items-center gap-4 px-10 py-5 text-sm tracking-widest uppercase"
                       style={{ background: selectedRoom ? gold : "rgba(255,255,255,0.05)", color: selectedRoom ? "#080806" : "rgba(255,255,255,0.2)", border: "none", cursor: selectedRoom ? "pointer" : "not-allowed" }}
-                      whileHover={selectedRoom ? { scale: 1.03 } : {}}
-                      whileTap={selectedRoom ? { scale: 0.97 } : {}}
+                      whileHover={selectedRoom ? { scale: 1.02 } : {}}
+                      whileTap={selectedRoom ? { scale: 0.98 } : {}}
                     >
-                      Continue <ArrowRight size={16} />
+                      Continue <ArrowRight size={18} />
                     </motion.button>
                   </div>
                 </motion.div>
@@ -451,43 +465,43 @@ function BookingContent() {
               {step === 4 && selectedRoom && (
                 <motion.div key="step4" {...slide(dir)}>
                   <h1
-                    className="font-light mb-6 leading-tight"
-                    style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "clamp(2.5rem,4vw,4.5rem)", color: "rgba(245,235,200,0.95)", letterSpacing: "-0.03em" }}
+                    className="font-light mb-12 leading-tight"
+                    style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "clamp(3.5rem,5.5vw,6.5rem)", color: "rgba(245,235,200,0.95)", letterSpacing: "-0.03em" }}
                   >
                     Confirm your<br />reservation
                   </h1>
 
                   {/* Room + dates summary */}
-                  <div className="flex items-center gap-4 p-4 mb-6" style={{ background: "rgba(10,10,8,0.5)", border: "1px solid rgba(212,168,67,0.12)" }}>
-                    <div className="w-14 h-14 flex-shrink-0 overflow-hidden">
+                  <div className="flex items-center gap-5 p-6 mb-10" style={{ background: "rgba(10,10,8,0.5)", border: "1px solid rgba(212,168,67,0.12)" }}>
+                    <div className="w-20 h-20 flex-shrink-0 overflow-hidden">
                       <div className="w-full h-full" style={{ backgroundImage: `url('${roomImg(selectedRoom.type)}')`, backgroundSize: "cover", backgroundPosition: "center" }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-light truncate" style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "1.2rem", color: "rgba(245,235,200,0.9)" }}>
+                      <p className="font-light truncate mb-1" style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "1.5rem", color: "rgba(245,235,200,0.9)" }}>
                         {selectedRoom.name}
                       </p>
-                      <p className="text-xs mt-0.5" style={{ color: "rgba(200,185,150,0.45)" }}>
+                      <p className="text-sm" style={{ color: "rgba(200,185,150,0.45)" }}>
                         {checkin} → {checkout} · {nights} {nights === 1 ? "night" : "nights"} · {guests} {guests === 1 ? "guest" : "guests"}
                       </p>
                     </div>
                     <div className="text-right flex-shrink-0">
-                      <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "1.5rem", color: gold, lineHeight: 1, letterSpacing: "-0.02em" }}>
+                      <p style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: "2rem", color: gold, lineHeight: 1, letterSpacing: "-0.02em" }}>
                         ${(selectedRoom.price_per_night * nights).toLocaleString()}
                       </p>
-                      <p className="text-xs mt-0.5" style={{ color: "rgba(200,185,150,0.35)" }}>total</p>
+                      <p className="text-xs mt-1" style={{ color: "rgba(200,185,150,0.35)" }}>total</p>
                     </div>
                   </div>
 
                   {/* Availability warning */}
                   {availableIds !== null && !availableIds.has(selectedRoom.id) && (
-                    <div className="mb-5 px-4 py-3 text-xs" style={{ background: "rgba(220,120,60,0.08)", border: "1px solid rgba(220,120,60,0.25)", color: "rgba(220,150,80,0.9)" }}>
+                    <div className="mb-8 px-5 py-4 text-sm" style={{ background: "rgba(220,120,60,0.08)", border: "1px solid rgba(220,120,60,0.25)", color: "rgba(220,150,80,0.9)" }}>
                       This room may not be available for your dates. You can still reserve — our team will confirm shortly.
                     </div>
                   )}
 
                   {/* Auth block — show user card if logged in, otherwise show signup form */}
                   {user ? (
-                    <div className="flex items-center gap-3 p-4 mb-5" style={{ background: "rgba(60,180,80,0.05)", border: "1px solid rgba(60,180,80,0.15)" }}>
+                    <div className="flex items-center gap-4 p-5 mb-8" style={{ background: "rgba(60,180,80,0.05)", border: "1px solid rgba(60,180,80,0.15)" }}>
                       <CheckCircle size={16} style={{ color: "rgba(80,200,120,0.8)" }} />
                       <div>
                         <p className="text-sm" style={{ color: "rgba(245,235,200,0.85)" }}>{user.name}</p>
@@ -502,23 +516,23 @@ function BookingContent() {
                       </button>
                     </div>
                   ) : (
-                    <div className="mb-5">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                    <div className="mb-8">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                         <div>
-                          <p className="text-xs tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.2)" }}>Your Name</p>
-                          <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Full name" className="w-full px-4 py-3 text-sm outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
+                          <p className="text-xs tracking-widest uppercase mb-3" style={{ color: "rgba(255,255,255,0.2)" }}>Your Name</p>
+                          <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Full name" className="w-full px-5 py-4 text-base outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
                         </div>
                         <div>
-                          <p className="text-xs tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.2)" }}>Email Address</p>
-                          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="your@email.com" className="w-full px-4 py-3 text-sm outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
+                          <p className="text-xs tracking-widest uppercase mb-3" style={{ color: "rgba(255,255,255,0.2)" }}>Email Address</p>
+                          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="your@email.com" className="w-full px-5 py-4 text-base outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
                         </div>
                         <div>
-                          <p className="text-xs tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.2)" }}>Phone</p>
-                          <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" placeholder="+1 555 000 0000" className="w-full px-4 py-3 text-sm outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
+                          <p className="text-xs tracking-widest uppercase mb-3" style={{ color: "rgba(255,255,255,0.2)" }}>Phone</p>
+                          <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" placeholder="+1 555 000 0000" className="w-full px-5 py-4 text-base outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
                         </div>
                         <div>
-                          <p className="text-xs tracking-widest uppercase mb-2" style={{ color: "rgba(255,255,255,0.2)" }}>Password</p>
-                          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Min. 8 characters" className="w-full px-4 py-3 text-sm outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
+                          <p className="text-xs tracking-widest uppercase mb-3" style={{ color: "rgba(255,255,255,0.2)" }}>Password</p>
+                          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Min. 8 characters" className="w-full px-5 py-4 text-base outline-none" style={fieldBase} onFocus={(e) => { e.target.style.borderColor = gold; }} onBlur={(e) => { e.target.style.borderColor = "rgba(212,168,67,0.15)"; }} />
                         </div>
                       </div>
                       <p className="text-xs text-center" style={{ color: "rgba(200,185,150,0.35)" }}>
@@ -529,12 +543,12 @@ function BookingContent() {
                   )}
 
                   {/* Payment mode */}
-                  <div className="flex gap-3 mb-2">
-                    {(["property", "online"] as PaymentMode[]).map((mode) => (
+                  <div className="flex gap-4 mb-3">
+                    {(["online", "property"] as PaymentMode[]).map((mode) => (
                       <button
                         key={mode}
                         onClick={() => setPaymentMode(mode)}
-                        className="flex-1 py-3 text-xs tracking-widest uppercase"
+                        className="flex-1 py-4 text-xs tracking-widest uppercase"
                         style={{
                           background: paymentMode === mode ? "rgba(212,168,67,0.12)" : "transparent",
                           border: `1px solid ${paymentMode === mode ? "rgba(212,168,67,0.4)" : "rgba(255,255,255,0.08)"}`,
@@ -546,27 +560,27 @@ function BookingContent() {
                     ))}
                   </div>
                   {paymentMode === "online" && (
-                    <p className="text-xs mb-4" style={{ color: "rgba(200,185,150,0.35)" }}>
+                    <p className="text-xs mb-8" style={{ color: "rgba(200,185,150,0.35)" }}>
                       You&apos;ll be taken to our secure payment page after confirming.
                     </p>
                   )}
                   {paymentMode === "property" && (
-                    <p className="text-xs mb-4" style={{ color: "rgba(200,185,150,0.35)" }}>
+                    <p className="text-xs mb-8" style={{ color: "rgba(200,185,150,0.35)" }}>
                       Pay when you arrive — no charge today.
                     </p>
                   )}
 
                   {apiError && (
-                    <p className="text-xs mb-4 px-3 py-2" style={{ background: "rgba(220,80,80,0.08)", border: "1px solid rgba(220,80,80,0.2)", color: "rgba(220,100,100,0.9)" }}>
+                    <p className="text-sm mb-6 px-4 py-3" style={{ background: "rgba(220,80,80,0.08)", border: "1px solid rgba(220,80,80,0.2)", color: "rgba(220,100,100,0.9)" }}>
                       {apiError}
                     </p>
                   )}
 
-                  <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <motion.button
                       onClick={handleReserve}
                       disabled={!canSubmit}
-                      className="flex-1 flex items-center justify-center gap-3 py-4 text-sm tracking-widest uppercase"
+                      className="flex-1 flex items-center justify-center gap-4 py-5 text-sm tracking-widest uppercase"
                       style={{ background: canSubmit ? gold : "rgba(255,255,255,0.05)", color: canSubmit ? "#080806" : "rgba(255,255,255,0.2)", border: "none" }}
                       whileHover={canSubmit ? { scale: 1.02 } : {}}
                       whileTap={canSubmit ? { scale: 0.98 } : {}}
@@ -575,7 +589,7 @@ function BookingContent() {
                     </motion.button>
                     <button
                       onClick={() => go(3)}
-                      className="px-8 py-4 text-xs tracking-widest uppercase"
+                      className="px-10 py-5 text-xs tracking-widest uppercase"
                       style={{ border: "1px solid rgba(255,255,255,0.08)", color: "rgba(200,190,160,0.35)", background: "transparent" }}
                     >
                       Change Room
@@ -625,7 +639,7 @@ function BookingContent() {
                 <>Log Cabin Luxury,<br />Lofted in Love.</>
               )}
             </p>
-            <p className="text-sm" style={{ color: "rgba(220,195,140,0.45)" }}>Brady Inn · Mountain View, CA</p>
+            <p className="text-sm" style={{ color: "rgba(220,195,140,0.45)" }}>Brady Inn · Brady, TX</p>
 
             <div className="mt-10 space-y-3">
               {[

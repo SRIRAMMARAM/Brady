@@ -1,5 +1,4 @@
 import Hero from "@/components/sections/Hero";
-import Stats from "@/components/sections/Stats";
 import Suites from "@/components/sections/Suites";
 import VideoBanner from "@/components/sections/VideoBanner";
 import Amenities from "@/components/sections/Amenities";
@@ -12,7 +11,6 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Stats />
       <Suites />
       <VideoBanner />
       <Amenities />

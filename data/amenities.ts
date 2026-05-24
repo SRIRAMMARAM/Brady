@@ -1,68 +1,74 @@
+export type AmenityCategory =
+  | "food-beverage"
+  | "recreation-wellness"
+  | "interactive-technology"
+  | "outdoor-nature";
+
 export interface Amenity {
   id: string;
   name: string;
   description: string;
   icon: string;
-  category: "wellness" | "dining" | "transport" | "tech" | "experience";
+  category: AmenityCategory;
 }
 
 export const amenities: Amenity[] = [
   {
+    id: "custom-coffee",
+    name: "Custom Coffee",
+    description: "In-house specialty coffee service for guests — crafted to order, every morning.",
+    icon: "coffee",
+    category: "food-beverage",
+  },
+  {
+    id: "sports-simulator",
+    name: "Sports Simulator Rooms",
+    description: "Interactive sports simulation experience. Tee off, swing, and play across virtual courses and arenas.",
+    icon: "gamepad",
+    category: "recreation-wellness",
+  },
+  {
     id: "spa",
-    name: "Aether Spa",
-    description: "12,000 sq ft sanctuary featuring cryotherapy, floatation pods, and signature void treatments.",
-    icon: "sparkles",
-    category: "wellness",
+    name: "Spa & Heart-Shaped Hot Tub",
+    description: "A private spa featuring a heart-shaped hot tub — guests fill their own water for an intimate, made-just-for-two ritual.",
+    icon: "heart",
+    category: "recreation-wellness",
   },
   {
-    id: "restaurant",
-    name: "NOCT Restaurant",
-    description: "Three Michelin stars. Zero-gravity dessert course. Reservations taken six months in advance.",
-    icon: "utensils-crossed",
-    category: "dining",
+    id: "sauna",
+    name: "Dry & Wet Sauna",
+    description: "Two saunas, two rituals — choose dry heat for clarity, or wet steam for deep relaxation.",
+    icon: "flame",
+    category: "recreation-wellness",
   },
   {
-    id: "helipad",
-    name: "Private Helipad",
-    description: "Direct rooftop arrival. No queues. No crowds. Just your sky.",
-    icon: "plane",
-    category: "transport",
+    id: "indoor-gym",
+    name: "Indoor Gym",
+    description: "A fully equipped fitness facility, open to guests around the clock.",
+    icon: "dumbbell",
+    category: "recreation-wellness",
   },
   {
-    id: "pool",
-    name: "Infinity Pools",
-    description: "Three infinity pools at different altitudes. One is heated to exactly 37°C at all times.",
-    icon: "waves",
-    category: "wellness",
+    id: "interactive-tv",
+    name: "Interactive TV",
+    description: "Smart, interactive TV systems in every room — stream, browse, and personalize your stay.",
+    icon: "tv",
+    category: "interactive-technology",
   },
   {
-    id: "ai-concierge",
-    name: "AI Concierge",
-    description: "Predictive intelligence that learns your preferences before you arrive.",
-    icon: "bot",
-    category: "tech",
+    id: "greenhouse",
+    name: "Greenhouse & Garden Walkthrough",
+    description: "A nature garden experience accessible to guests — quiet paths, fresh greens, and a moment of stillness.",
+    icon: "leaf",
+    category: "outdoor-nature",
   },
-  {
-    id: "cinema",
-    name: "Private Cinema",
-    description: "8K Dolby Atmos screening room with custom programming. Available exclusively per suite.",
-    icon: "film",
-    category: "experience",
-  },
-  {
-    id: "chauffeur",
-    name: "Tesla Fleet",
-    description: "Dedicated fleet of Model S Plaid. Silent. Fast. Yours.",
-    icon: "car",
-    category: "transport",
-  },
-  {
-    id: "wine",
-    name: "Cellar & Cave",
-    description: "A curated cellar of 8,000 bottles. Personal sommelier. Temperature-controlled tasting room.",
-    icon: "wine",
-    category: "dining",
-  },
+];
+
+export const amenityCategories: { id: AmenityCategory; label: string }[] = [
+  { id: "food-beverage",          label: "Food & Beverage" },
+  { id: "recreation-wellness",    label: "Recreation & Wellness" },
+  { id: "interactive-technology", label: "Interactive Technology" },
+  { id: "outdoor-nature",         label: "Outdoor & Nature" },
 ];
 
 export const experiences = [

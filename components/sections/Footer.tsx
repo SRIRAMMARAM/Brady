@@ -13,19 +13,19 @@ const footerLinks = {
     { label: "The Honeymoon Cabin", href: "/rooms#the-honeymoon-cabin" },
     { label: "The Brady Loft", href: "/rooms#the-brady-loft" },
   ],
-  Experiences: [
-    { label: "Cabin Breakfast", href: "/dining" },
-    { label: "Nature Trails", href: "/experience#trails" },
-    { label: "Stargazing Nights", href: "/experience#stargazing" },
-    { label: "Firepit & S'mores", href: "/experience#firepit" },
-    { label: "All Experiences", href: "/experience" },
+  Amenities: [
+    { label: "Custom Coffee", href: "/amenities" },
+    { label: "Sports Simulator", href: "/amenities" },
+    { label: "Spa & Hot Tub", href: "/amenities" },
+    { label: "Sauna", href: "/amenities" },
+    { label: "All Amenities", href: "/amenities" },
   ],
-  Company: [
+  Reservations: [
+    { label: "Reserve a Room", href: "/booking" },
+    { label: "Look Up Booking", href: "/booking/lookup" },
+    { label: "My Bookings", href: "/my-bookings" },
+    { label: "Contact Us", href: "/contact" },
     { label: "Gallery", href: "/gallery" },
-    { label: "Press", href: "#" },
-    { label: "Careers", href: "#" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms", href: "#" },
   ],
 };
 
@@ -34,7 +34,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative overflow-hidden"
+      className="relative overflow-hidden mt-auto"
       style={{ backgroundColor: "#080604" }}
     >
       {/* Top divider */}
@@ -176,7 +176,7 @@ export default function Footer() {
               style={{ background: "#d4a843" }}
             />
             <p className="text-xs tracking-widest uppercase" style={{ color: "rgba(212,168,67,0.22)" }}>
-              Mountain View · California
+              Brady · Texas
             </p>
           </div>
 

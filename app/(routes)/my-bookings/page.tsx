@@ -105,6 +105,10 @@ function LoginPrompt() {
         <Link href="/booking" style={{ color: "rgba(212,168,67,0.5)", textDecoration: "underline" }}>Make a reservation</Link>
         {" "}to create an account.
       </p>
+      <p className="mt-2 text-xs text-center" style={{ color: "rgba(200,185,150,0.3)" }}>
+        Booked as a guest?{" "}
+        <Link href="/booking/lookup" style={{ color: "rgba(212,168,67,0.5)", textDecoration: "underline" }}>Look up by reference code</Link>
+      </p>
     </div>
   );
 }
