@@ -262,6 +262,13 @@ export default function MyBookingsPage() {
                         {/* Right — actions */}
                         {booking.booking_status !== "cancelled" && (
                           <div className="flex flex-col gap-2 min-w-[140px]">
+                            {booking.payment_mode === "online" && booking.payment_status === "unpaid" && (
+                              <Link href={`/booking/${booking.ref_code}/pay`}>
+                                <motion.button className="w-full py-2.5 text-xs tracking-widest uppercase" style={{ background: gold, color: "#080806", border: "none" }} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                                  Pay Now
+                                </motion.button>
+                              </Link>
+                            )}
                             <Link href={`/booking/lookup?ref=${booking.ref_code}`}>
                               <motion.button className="w-full py-2.5 text-xs tracking-widest uppercase" style={{ border: "1px solid rgba(212,168,67,0.25)", color: "rgba(212,168,67,0.7)", background: "transparent" }} whileHover={{ background: "rgba(212,168,67,0.08)" }}>
                                 View Details

@@ -9,7 +9,7 @@ const BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 export type UserRole = "admin" | "user";
 export type BookingStatus = "pending" | "confirmed" | "cancelled";
 export type PaymentMode = "online" | "property";
-export type PaymentStatus = "unpaid" | "paid";
+export type PaymentStatus = "unpaid" | "paid" | "refunded";
 
 export interface UserRead {
   id: number;
@@ -42,6 +42,7 @@ export interface BookingRead {
   payment_mode: PaymentMode;
   payment_status: PaymentStatus;
   booking_status: BookingStatus;
+  stripe_payment_intent_id?: string | null;
   created_at: string;
 }
 
@@ -70,6 +71,17 @@ export interface PayOnlineResponse {
 
 export interface InquiryResponse {
   ok: boolean;
+}
+
+export interface RefundResponse {
+  ref_code: string;
+  refund_id: string;
+  amount: number;
+}
+
+export interface RoomImpact extends RoomRead {
+  future_bookings: BookingRead[];
+  future_bookings_count: number;
 }
 
 // ─── Request bodies ───────────────────────────────────────────────────────
@@ -170,6 +182,9 @@ export const auth = {
 
   me: (token: string) =>
     req<UserRead>("/auth/me", {}, token),
+
+  logout: (token: string) =>
+    req<void>("/auth/logout", { method: "POST" }, token),
 };
 
 // ─── Rooms (public) ───────────────────────────────────────────────────────
@@ -218,6 +233,19 @@ export const userBookings = {
     ),
 };
 
+// ─── Stripe ──────────────────────────────────────────────────────────────
+
+export interface StripeConfig {
+  publishable_key?: string;
+  publishableKey?: string;
+  [key: string]: unknown;
+}
+
+export const stripe = {
+  config: () =>
+    req<StripeConfig>("/stripe/config"),
+};
+
 // ─── Inquiries (public) ───────────────────────────────────────────────────
 
 export const inquiries = {
@@ -239,6 +267,9 @@ export const adminRooms = {
 
   delete: (room_id: number, token: string) =>
     req<void>(`/admin/rooms/${room_id}`, { method: "DELETE" }, token),
+
+  impact: (room_id: number, token: string) =>
+    req<RoomImpact>(`/admin/rooms/${room_id}/impact`, {}, token),
 };
 
 // ─── Admin — Bookings ─────────────────────────────────────────────────────
@@ -255,4 +286,10 @@ export const adminBookings = {
 
   cancel: (ref_code: string, token: string) =>
     req<void>(`/admin/bookings/${ref_code}`, { method: "DELETE" }, token),
+
+  markPaid: (ref_code: string, token: string) =>
+    req<void>(`/admin/bookings/${ref_code}/mark-paid`, { method: "PATCH" }, token),
+
+  refund: (ref_code: string, token: string) =>
+    req<RefundResponse>(`/admin/bookings/${ref_code}/refund`, { method: "POST" }, token),
 };

@@ -87,6 +87,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
+    const token = loadToken(KEYS.access);
+    if (token) auth.logout(token).catch(() => { /* best-effort */ });
     clearTokens();
     setUser(null);
     setAccessToken(null);

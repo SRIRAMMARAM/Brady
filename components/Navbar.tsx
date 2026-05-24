@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, BookOpen } from "lucide-react";
+import { Menu, X, BookOpen, Shield } from "lucide-react";
 import { NAV_LINKS, SITE_NAME } from "@/constants";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -125,6 +125,19 @@ export default function Navbar() {
           >
             {user && (
               <>
+                {user.role === "admin" && (
+                  <Link href="/admin" data-cursor="hover">
+                    <motion.button
+                      className="flex items-center gap-2 px-4 py-2.5 text-xs tracking-[0.12em] uppercase"
+                      style={{ border: "1px solid rgba(180,140,255,0.25)", color: "rgba(200,170,255,0.85)", background: "transparent" }}
+                      whileHover={{ background: "rgba(180,140,255,0.08)", scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Shield size={13} />
+                      Admin
+                    </motion.button>
+                  </Link>
+                )}
                 <Link href="/my-bookings" data-cursor="hover">
                   <motion.button
                     className="flex items-center gap-2 px-4 py-2.5 text-xs tracking-[0.12em] uppercase"
