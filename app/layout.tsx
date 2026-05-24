@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -42,7 +43,9 @@ export default function RootLayout({
     >
       <body style={{ backgroundColor: "#080604", color: "#f5efe0", overflowX: "hidden" }}>
         <AuthProvider>
-          <ClientLayout>{children}</ClientLayout>
+          <ErrorBoundary>
+            <ClientLayout>{children}</ClientLayout>
+          </ErrorBoundary>
         </AuthProvider>
       </body>
     </html>

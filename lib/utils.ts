@@ -32,6 +32,10 @@ export function mapRange(
   return outMin + ((value - inMin) / (inMax - inMin)) * (outMax - outMin);
 }
 
+export function normalizeRoomName(name: string): string {
+  return name.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
 export function slugify(text: string): string {
   return text
     .toLowerCase()

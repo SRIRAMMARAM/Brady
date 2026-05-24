@@ -246,7 +246,7 @@ function RoomFormModal({ token, initial, onClose, onSaved }: {
   const [busy,  setBusy]  = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleSave(e: React.FormEvent) {
+  async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true); setError(null);
     try {

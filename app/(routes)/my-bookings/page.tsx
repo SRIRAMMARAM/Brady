@@ -11,6 +11,7 @@ import Footer from "@/components/sections/Footer";
 import { useAuth, ApiError } from "@/contexts/AuthContext";
 import { userBookings, bookings as bookingApi, type BookingRead } from "@/lib/api";
 import { staggerContainer, staggerItem, fadeUp } from "@/animations/variants";
+import { FIELD_STYLE, ERROR_STYLE, CARD_STYLE } from "@/lib/theme";
 
 const gold = "rgba(212,168,67,0.9)";
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -31,14 +32,29 @@ function StatusBadge({ status }: { status: BookingRead["booking_status"] }) {
 }
 
 // ─── Payment badge ────────────────────────────────────────────────────────
-function PayBadge({ status }: { status: BookingRead["payment_status"] }) {
+function PayBadge({ status, mode }: {
+  status: BookingRead["payment_status"];
+  mode:   BookingRead["payment_mode"];
+}) {
+  const label =
+    status === "paid"     ? "Paid" :
+    status === "refunded" ? "Refunded" :
+    mode   === "online"   ? "Pay Online" :
+    "Pay at Property";
+
+  const rgba =
+    status === "paid"     ? "60,180,80" :
+    status === "refunded" ? "124,58,237" :
+    mode   === "online"   ? "212,168,67" :
+    "200,185,150";
+
   return (
     <span className="text-xs px-2 py-0.5" style={{
-      background: status === "paid" ? "rgba(60,180,80,0.08)" : "rgba(212,168,67,0.08)",
-      border: `1px solid ${status === "paid" ? "rgba(60,180,80,0.2)" : "rgba(212,168,67,0.2)"}`,
-      color: status === "paid" ? "rgba(80,200,120,0.8)" : "rgba(212,168,67,0.7)",
+      background: `rgba(${rgba},0.08)`,
+      border:     `1px solid rgba(${rgba},0.2)`,
+      color:      `rgba(${rgba},0.8)`,
     }}>
-      {status === "paid" ? "Paid" : "Pay at property"}
+      {label}
     </span>
   );
 }
@@ -51,14 +67,9 @@ function LoginPrompt() {
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState<string | null>(null);
 
-  const fieldStyle = {
-    background: "rgba(10,10,14,0.7)",
-    border: "1px solid rgba(212,168,67,0.15)",
-    color: "rgba(240,235,220,0.85)",
-    colorScheme: "dark" as const,
-  };
+  const fieldStyle = FIELD_STYLE;
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true); setError(null);
     try { await login(email, password); }
@@ -230,7 +241,7 @@ export default function MyBookingsPage() {
                               {booking.room.name}
                             </p>
                             <StatusBadge status={booking.booking_status} />
-                            <PayBadge status={booking.payment_status} />
+                            <PayBadge status={booking.payment_status} mode={booking.payment_mode} />
                           </div>
 
                           <div className="flex flex-wrap gap-6 text-xs mb-4" style={{ color: "rgba(200,185,150,0.5)" }}>
