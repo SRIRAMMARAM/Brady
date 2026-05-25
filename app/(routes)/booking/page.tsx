@@ -215,7 +215,7 @@ function BookingContent() {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-16">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-16 max-w-2xl">
                     {[
                       { label: "Check-in",  val: checkin,  set: setCheckin,  min: today       },
                       { label: "Check-out", val: checkout, set: setCheckout, min: minCheckout },
